@@ -1,0 +1,67 @@
+Handle,REF,Nombre,Categoria,Descripción,Vendido por peso,Opción 1 nombre,Opción 1 valor,Opción 2 nombre,Opción 2 valor,Opción 3 nombre,Opción 3 valor,Precio por defecto,Coste,Codigo de barras,REF del componente,Cantidad del componente,Seguir el Inventario,Disponibles para la venta [Fubba Bubba],Precio [Fubba Bubba],En inventario [Fubba Bubba],Existencias bajas [Fubba Bubba],Disponibles para la venta [Fubba 1],Precio [Fubba 1],En inventario [Fubba 1],Existencias bajas [Fubba 1],"modificador - ""Leche"""
+agua-de-litro,10052,Agua de Litro,EXTRAS,,N,,,,,,,15.00,0.00,,,,Y,Y,15.00,-15.000,0.000,Y,15.00,0.000,,N
+fubba-arroz-con-leche,10013,ARROZ CON LECHE,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,-70.000,0.000,Y,95.00,0.000,,N
+arroz-con-leche-caliente,10028,Arroz con leche caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,N,Y,85.00,,,Y,85.00,,,N
+agua-2,10048,BASE AGUA,BASES,,N,,,,,,,0.00,0.00,,,,N,Y,0.00,,,Y,0.00,,,N
+leche-deslactosada,10034,BASE DESLACTOSADA,BASES,,N,,,,,,,10.00,0.00,,,,Y,Y,10.00,-234.000,0.000,Y,10.00,0.000,,N
+leche-entera,10033,BASE ENTERA,BASES,,N,,,,,,,0.00,0.00,,,,Y,Y,0.00,-1341.000,0.000,Y,0.00,0.000,,N
+fubba-blue-berry,10017,BLUEBERRY,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,551.000,0.000,Y,95.00,0.000,,N
+bombones,10029,Bombones,,,N,,,,,,,15.00,15.00,,,,N,Y,15.00,,,Y,15.00,,,N
+brownies,10035,BROWNIES,BOTANA,,N,,,,,,,10.00,0.00,,,,Y,Y,10.00,-197.000,0.000,Y,10.00,0.000,,N
+fubba-cafe,10009,CAFE,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,673.000,0.000,Y,95.00,0.000,,N
+café-caliente,10053,Café caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,N,Y,85.00,,,Y,85.00,,,N
+fubba-chai-vainilla,10006,CHAI VAINILLA,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,730.000,0.000,Y,95.00,0.000,,N
+fubba-chai-vainilla-1,10027,CHAI VAINILLA caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,Y,Y,85.00,85.000,0.000,Y,85.00,0.000,,N
+fubba-chocó-blanco,10041,CHOCÓLATE BLANCO,,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,-25.000,0.000,Y,95.00,0.000,,N
+chocolate-blanco-caliente,10031,CHOCOLATE BLANCO caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,N,Y,85.00,,,Y,85.00,,,N
+fubba-chocolate-1,10023,CHOCOLATE caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,Y,Y,85.00,91.000,0.000,Y,85.00,0.000,,N
+fubba-chocolate,10007,CHOCOLATE 🍫,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,-16.000,0.000,Y,95.00,0.000,,N
+fubba-coco-1,10024,COCO caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,Y,Y,85.00,88.000,0.000,Y,85.00,0.000,,N
+fubba-coco,10000,COCO 🥥,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,107.000,0.000,Y,95.00,0.000,,N
+convinacion,10046,Combinación,Combinaciones Fubba,,N,,,,,,,80.00,0.00,,,,Y,Y,85.00,9772.000,0.000,Y,85.00,0.000,,N
+crema-batida,10059,Crema batida,EXTRAS,,N,,,,,,,10.00,0.00,,,,N,Y,10.00,,,Y,10.00,,,N
+fubba-frambuesa,10016,FRAMBUESA,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,740.000,0.000,Y,95.00,0.000,,N
+fubba-fresa,10002,FRESA 🍓,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,651.000,0.000,Y,95.00,0.000,,N
+mini-vainilla,10032,FUBBA MINI,Fubba minis,,N,,,,,,,60.00,0.00,,,,Y,Y,85.00,47.000,0.000,Y,85.00,0.000,,N
+galleta,10039,GALLETA DE NUTELLA,BOTANA,,N,,,,,,,20.00,0.00,,,,Y,Y,20.00,54.000,0.000,Y,20.00,0.000,,N
+fubba-granada,10021,GRANADA,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,45.000,0.000,Y,95.00,0.000,,N
+fubba-moka,10010,JAVA CHIP,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,N,Y,95.00,,,Y,95.00,,,N
+jelly-cafe,10065,JELLY CAFE,EXTRAS,,N,,,,,,,15.00,0.00,,,,N,Y,15.00,,,Y,15.00,,,N
+k-pop,10047,K-Pop,BOTANA,,N,,,,,,,15.00,0.00,,,,N,Y,25.00,,,Y,25.00,,,N
+fubba-kiwi,10044,KIWI 🥝,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,-62.000,0.000,Y,95.00,0.000,,N
+latte-chai,10057,LATTE CHAI,,,N,,,,,,,90.00,0.00,,,,N,Y,90.00,,,Y,90.00,,,Y
+latte-chocolate-blanco,10054,LATTE CHOCOLATE BLANCO,LATTES,,N,,,,,,,90.00,0.00,,,,N,Y,90.00,,,Y,90.00,,,N
+latte-matcha,10056,LATTE MATCHA,,,N,,,,,,,90.00,0.00,,,,N,Y,90.00,,,Y,90.00,,,Y
+latte-taro,10055,LATTE TARO,LATTES,,N,,,,,,,90.00,0.00,,,,N,Y,90.00,,,Y,90.00,,,Y
+fubba-liche,10015,LICHE,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,722.000,0.000,Y,95.00,0.000,,N
+fubba-limon,10042,LIMON 🍋,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,-19.000,0.000,Y,95.00,0.000,,N
+mango-enchilado,10037,MANGO ENCHILADO,BOTANA,,N,,,,,,,20.00,0.00,,,,Y,Y,20.00,-15.000,0.000,Y,20.00,0.000,,N
+fubba-mango,10005,MANGO 🥭,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,618.000,0.000,Y,95.00,0.000,,N
+fubba-matcha-1,10040,MATCHA,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,477.000,0.000,Y,95.00,0.000,,N
+fubba-matcha,10026,MATCHA caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,Y,Y,85.00,48.000,0.000,Y,85.00,0.000,,N
+fubba-mazapan,10008,MAZAPAN,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,754.000,0.000,Y,95.00,0.000,,N
+fubba-nutella,10012,NUTELLA,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,-278.000,0.000,Y,95.00,0.000,,N
+obleas,10038,OBLEAS,BOTANA,,N,,,,,,,35.00,0.00,,,,Y,Y,35.00,-24.000,0.000,Y,35.00,0.000,,N
+fubba-oreo,10011,OREO,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,364.000,0.000,Y,95.00,0.000,,N
+palomitas,10036,PALOMITAS,BOTANA,,N,,,,,,,0.00,0.00,,,,Y,Y,0.00,100.000,0.000,Y,0.00,0.000,,N
+fubba-pelon,10020,PELON PELO RICO,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,9.000,0.000,Y,95.00,0.000,,N
+fubba-manzana,10003,PIÑA 🍍,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,71.000,0.000,Y,95.00,0.000,,N
+popote-extra,10045,Popote extra,,,N,,,,,,,3.00,0.00,,,,N,Y,3.00,,,Y,3.00,,,N
+poppin-pearls-blueberry,10060,Poppin pearls BLUEBERRY,EXTRAS,,N,,,,,,,15.00,0.00,,,,N,Y,15.00,,,Y,15.00,,,N
+poppin-pearls-chocolt,10063,Poppin pearls CHOCOLATE,EXTRAS,,N,,,,,,,15.00,0.00,,,,N,Y,15.00,,,Y,15.00,,,N
+poppin-pearls-frambuesa,10061,Poppin pearls FRAMBUESA,EXTRAS,,N,,,,,,,15.00,0.00,,,,N,Y,15.00,,,Y,15.00,,,N
+poppin-pearls-fresa,10062,Poppin pearls FRESA,EXTRAS,,N,,,,,,,15.00,0.00,,,,N,Y,15.00,,,Y,15.00,,,N
+poppin-pearls-litche,10064,Poppin pearls LITCHE,EXTRAS,,N,,,,,,,15.00,0.00,,,,N,Y,15.00,,,Y,15.00,,,N
+promo-mini,10058,Promo mini,Fubba minis,,N,,,,,,,100.00,0.00,,,,N,Y,100.00,,,Y,100.00,,,N
+sabor-extra-1,10051,Sabor extra,EXTRAS,,N,,,,,,,10.00,0.00,,,,N,Y,10.00,,,Y,10.00,,,N
+fubba-sandia,10019,SANDIA 🍉,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,19.000,0.000,Y,95.00,0.000,,N
+tapioca-extra,10030,TAPIOCA EXTRA,EXTRAS,,N,,,,,,,10.00,0.00,,,,Y,Y,10.00,693.000,0.000,Y,10.00,0.000,,N
+fubba-taro,10025,TARO caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,Y,Y,85.00,51.000,0.000,Y,85.00,0.000,,N
+fubba-taro-s/n-azucar,10014,TARO S/N AZUCAR,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,30.000,0.000,Y,95.00,0.000,,N
+fubba-laro,10001,TARO 🟣,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,380.000,0.000,Y,95.00,0.000,,N
+fubba-te-verde,10043,TE VERDE 🌿,,,N,,,,,,,80.00,0.00,,,,Y,Y,85.00,51.000,0.000,Y,85.00,0.000,,N
+fubba-uva,10018,UVA 🍇,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,70.000,0.000,Y,95.00,0.000,,N
+fubba-vainilla,10004,VAINILLA,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,785.000,0.000,Y,95.00,0.000,,N
+fubba-vainilla-1,10022,VAINILLA caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,Y,Y,85.00,75.000,0.000,Y,85.00,0.000,,N
+vaso,10050,Vaso extra,,,N,,,,,,,5.00,1000.00,,,,N,Y,5.00,,,Y,5.00,,,N
+xilim-slp,10049,Xilim SLP,BOTANA,,N,,,,,,,35.00,0.00,,,,Y,Y,35.00,-8.000,0.000,Y,35.00,0.000,,N

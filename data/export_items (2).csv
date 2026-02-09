@@ -1,0 +1,10 @@
+Handle,REF,Nombre,Categoria,Descripción,Vendido por peso,Opción 1 nombre,Opción 1 valor,Opción 2 nombre,Opción 2 valor,Opción 3 nombre,Opción 3 valor,Precio por defecto,Coste,Codigo de barras,REF del componente,Cantidad del componente,Seguir el Inventario,Disponibles para la venta [Fubba 1],Precio [Fubba 1],En inventario [Fubba 1],Existencias bajas [Fubba 1],"modificador - ""Leche"""
+arroz-con-leche-caliente,10028,Arroz con leche caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,N,Y,85.00,,,N
+café-caliente,10053,Café caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,N,Y,85.00,,,N
+fubba-chai-vainilla-1,10027,CHAI VAINILLA caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,Y,Y,85.00,0.000,,N
+chocolate-blanco-caliente,10031,CHOCOLATE BLANCO caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,N,Y,85.00,,,N
+fubba-chocolate-1,10023,CHOCOLATE caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,Y,Y,85.00,0.000,,N
+fubba-coco-1,10024,COCO caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,Y,Y,85.00,0.000,,N
+fubba-matcha,10026,MATCHA caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,Y,Y,85.00,0.000,,N
+fubba-taro,10025,TARO caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,Y,Y,85.00,0.000,,N
+fubba-vainilla-1,10022,VAINILLA caliente,SABORES CALIENTES,,N,,,,,,,80.00,0.00,,,,Y,Y,85.00,0.000,,N

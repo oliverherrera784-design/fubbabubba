@@ -1,0 +1,26 @@
+Handle,REF,Nombre,Categoria,Descripción,Vendido por peso,Opción 1 nombre,Opción 1 valor,Opción 2 nombre,Opción 2 valor,Opción 3 nombre,Opción 3 valor,Precio por defecto,Coste,Codigo de barras,REF del componente,Cantidad del componente,Seguir el Inventario,Disponibles para la venta [Fubba 1],Precio [Fubba 1],En inventario [Fubba 1],Existencias bajas [Fubba 1],"modificador - ""Leche"""
+fubba-arroz-con-leche,10013,ARROZ CON LECHE,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-blue-berry,10017,BLUEBERRY,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-cafe,10009,CAFE,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-chai-vainilla,10006,CHAI VAINILLA,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-chocolate,10007,CHOCOLATE 🍫,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-coco,10000,COCO 🥥,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-frambuesa,10016,FRAMBUESA,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-fresa,10002,FRESA 🍓,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-granada,10021,GRANADA,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-moka,10010,JAVA CHIP,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,N,Y,95.00,,,N
+fubba-kiwi,10044,KIWI 🥝,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-liche,10015,LICHE,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-limon,10042,LIMON 🍋,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-mango,10005,MANGO 🥭,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-matcha-1,10040,MATCHA,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-mazapan,10008,MAZAPAN,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-nutella,10012,NUTELLA,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-oreo,10011,OREO,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-pelon,10020,PELON PELO RICO,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-manzana,10003,PIÑA 🍍,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-sandia,10019,SANDIA 🍉,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-taro-s/n-azucar,10014,TARO S/N AZUCAR,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-laro,10001,TARO 🟣,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-uva,10018,UVA 🍇,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
+fubba-vainilla,10004,VAINILLA,SABORES FRIOS,,N,,,,,,,80.00,0.00,,,,Y,Y,95.00,0.000,,N
