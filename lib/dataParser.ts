@@ -83,7 +83,7 @@ export function parseProductData(csvData: string): Product[] {
 // Generar datos de ejemplo para ventas (esto se reemplazará con datos reales de Loyverse)
 export function generateMockSalesData(): any[] {
   const now = new Date();
-  const salesData = [];
+  const salesData: any[] = [];
 
   // Últimos 30 días
   for (let i = 30; i >= 0; i--) {
