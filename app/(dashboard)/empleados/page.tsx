@@ -13,6 +13,7 @@ interface Empleado {
   sucursal_id: number | null;
   puesto: string | null;
   pin: string | null;
+  has_pin: boolean;
   rol: Rol | null;
   activo: boolean;
   created_at: string;
