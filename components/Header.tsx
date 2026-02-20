@@ -1,9 +1,12 @@
 'use client';
 
-import { Bell, Search, User } from 'lucide-react';
+import { Bell, Search, User, LogOut } from 'lucide-react';
 import { useState } from 'react';
+import { useAuth, ROL_LABELS } from '@/lib/auth';
 
 export function Header() {
+  const { user, logout } = useAuth();
+
   const [currentDate] = useState(new Date().toLocaleDateString('es-MX', {
     weekday: 'long',
     year: 'numeric',
@@ -11,11 +14,15 @@ export function Header() {
     day: 'numeric'
   }));
 
+  const rolLabel = user ? ROL_LABELS[user.rol] : '';
+
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Bienvenido de nuevo</h2>
+          <h2 className="text-2xl font-bold text-gray-800">
+            Bienvenido{user ? `, ${user.nombre}` : ''}
+          </h2>
           <p className="text-sm text-gray-500 capitalize">{currentDate}</p>
         </div>
 
@@ -37,15 +44,22 @@ export function Header() {
           </button>
 
           {/* Usuario */}
-          <button className="flex items-center gap-3 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors">
+          <div className="flex items-center gap-3 px-3 py-2 rounded-lg">
             <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
               <User className="w-6 h-6 text-white" />
             </div>
             <div className="text-left">
-              <p className="text-sm font-semibold text-gray-800">Carly</p>
-              <p className="text-xs text-gray-500">Administrador</p>
+              <p className="text-sm font-semibold text-gray-800">{user?.nombre || 'Usuario'}</p>
+              <p className="text-xs text-gray-500">{rolLabel}</p>
             </div>
-          </button>
+            <button
+              onClick={logout}
+              className="p-2 hover:bg-red-50 rounded-lg transition-colors ml-1"
+              title="Cerrar sesión"
+            >
+              <LogOut className="w-4 h-4 text-red-500" />
+            </button>
+          </div>
         </div>
       </div>
     </header>

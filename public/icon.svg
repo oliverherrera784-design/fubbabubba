@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#db2777"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <!-- Cup body -->
+  <path d="M 160 160 L 180 400 C 180 420 200 440 256 440 C 312 440 332 420 332 400 L 352 160 Z" fill="white" opacity="0.95"/>
+  <!-- Cup lid -->
+  <rect x="140" y="140" width="232" height="30" rx="8" fill="white"/>
+  <!-- Straw -->
+  <rect x="290" y="60" width="12" height="160" rx="6" fill="white" transform="rotate(-15, 296, 140)"/>
+  <!-- Bubbles -->
+  <circle cx="220" cy="360" r="16" fill="#7c3aed" opacity="0.6"/>
+  <circle cx="260" cy="380" r="14" fill="#7c3aed" opacity="0.5"/>
+  <circle cx="300" cy="355" r="16" fill="#7c3aed" opacity="0.6"/>
+  <circle cx="240" cy="340" r="12" fill="#db2777" opacity="0.5"/>
+  <circle cx="280" cy="365" r="10" fill="#db2777" opacity="0.4"/>
+  <circle cx="230" cy="385" r="13" fill="#7c3aed" opacity="0.4"/>
+  <!-- FB text -->
+  <text x="256" y="280" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#7c3aed" text-anchor="middle" opacity="0.8">FB</text>
+</svg>
