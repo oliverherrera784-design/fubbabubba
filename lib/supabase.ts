@@ -568,11 +568,15 @@ export async function reembolsarOrden(ordenId: string): Promise<Orden> {
   // Restaurar inventario (best-effort, no bloquea el reembolso)
   if (ordenInfo && items) {
     for (const item of items) {
-      await supabase.rpc('descontar_inventario', {
-        p_producto_id: item.producto_id,
-        p_sucursal_id: ordenInfo.sucursal_id,
-        p_cantidad: -item.cantidad,
-      }).catch(err => console.warn(`Inventario no restaurado para producto ${item.producto_id}:`, err));
+      try {
+        await supabase.rpc('descontar_inventario', {
+          p_producto_id: item.producto_id,
+          p_sucursal_id: ordenInfo.sucursal_id,
+          p_cantidad: -item.cantidad,
+        });
+      } catch (err) {
+        console.warn(`Inventario no restaurado para producto ${item.producto_id}:`, err);
+      }
     }
   }
 
