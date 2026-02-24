@@ -382,7 +382,8 @@ export function CerrarCajaModal({
             {efectivoNum > 0 && (() => {
               const totalFormasPago = resumen.por_metodo.efectivo + resumen.por_metodo.tarjeta + resumen.por_metodo.app_plataforma;
               const fondoInicial = resumen.fondo_apertura;
-              const total1 = totalFormasPago - fondoInicial;
+              const depositosCorte = resumen.depositos;
+              const total1 = totalFormasPago + fondoInicial + depositosCorte;
               const plataformas = resumen.por_metodo.app_plataforma;
               const total2 = total1 - plataformas;
               const totalTarjetas = resumen.por_metodo.tarjeta;
@@ -392,10 +393,11 @@ export function CerrarCajaModal({
               const retiroEfectivo = resumen.retiros;
               const total5 = total4 - retiroEfectivo;
               const realidadCaja = efectivoNum;
-              const totalFinal = total5;
-              const diferencia = realidadCaja - totalFinal;
+              const totalFinal = total5 - realidadCaja;
               const deudaPlataformas = resumen.sobreprecio_plataformas || 0;
               const pv = resumen.piezas_vendidas || 0;
+
+              const recibeNombre = recibeId ? empleados.find(e => e.id === recibeId)?.nombre : null;
 
               const imprimirCorte = () => {
                 const ahora = new Date();
@@ -408,29 +410,31 @@ body{width:58mm;font-family:'Courier New',monospace;font-size:11px;line-height:1
 h2{text-align:center;font-size:14px;margin-bottom:4px}
 .row{display:flex;justify-content:space-between}.bold{font-weight:bold}
 .sep{border-top:1px dashed #000;margin:3px 0}.indent{padding-left:8px}
+.small{font-size:9px;color:#666}
 </style></head><body>
 <h2>HOJA CORTE FINAL</h2>
 <div class="row"><span>FECHA: ${fechaStr} ${horaStr}</span></div>
-<div class="row"><span>REALIZA: ${sucursalNombre}</span></div>
+<div class="row"><span>SUCURSAL: ${sucursalNombre}</span></div>
+${recibeNombre ? `<div class="row"><span>RECIBE: ${recibeNombre}</span></div>` : ''}
 <div class="sep"></div>
 <div class="row bold"><span>+ TOTAL FORMAS PAGO</span><span>${fmt(totalFormasPago)}</span></div>
+<div class="small indent">Efvo:${fmt(resumen.por_metodo.efectivo)} Tarj:${fmt(resumen.por_metodo.tarjeta)} Plat:${fmt(resumen.por_metodo.app_plataforma)}</div>
 <div class="row indent"><span>FONDO INICIAL CAJA</span><span>${fmt(fondoInicial)}</span></div>
-<div class="row bold"><span>- TOTAL 1=</span><span>${fmt(total1)}</span></div>
+${depositosCorte > 0 ? `<div class="row indent"><span>DEPOSITOS</span><span>${fmt(depositosCorte)}</span></div>` : ''}
+<div class="row bold"><span>= TOTAL 1</span><span>${fmt(total1)}</span></div>
 <div class="row indent"><span>PLATAFORMAS</span><span>${fmt(plataformas)}</span></div>
-<div class="row bold"><span>- TOTAL 2=</span><span>${fmt(total2)}</span></div>
+<div class="row bold"><span>= TOTAL 2</span><span>${fmt(total2)}</span></div>
 <div class="row indent"><span>TOTAL TARJETAS</span><span>${fmt(totalTarjetas)}</span></div>
-<div class="row bold"><span>- TOTAL 3=</span><span>${fmt(total3)}</span></div>
+<div class="row bold"><span>= TOTAL 3</span><span>${fmt(total3)}</span></div>
 <div class="row indent"><span>GASTOS</span><span>${fmt(gastosCorte)}</span></div>
-<div class="row bold"><span>- TOTAL 4=</span><span>${fmt(total4)}</span></div>
+<div class="row bold"><span>= TOTAL 4</span><span>${fmt(total4)}</span></div>
 <div class="row indent"><span>RETIRO DE EFECTIVO</span><span>${fmt(retiroEfectivo)}</span></div>
-<div class="row bold"><span>- TOTAL 5=</span><span>${fmt(total5)}</span></div>
+<div class="row bold"><span>= EFECTIVO TEORICO</span><span>${fmt(total5)}</span></div>
 <div class="sep"></div>
 <div class="row"><span>REALIDAD DE CAJA</span><span>${fmt(realidadCaja)}</span></div>
-<div class="row bold"><span>TOTAL FINAL</span><span>${fmt(totalFinal)}</span></div>
-<div class="row bold"><span>(+/-) ${diferencia >= 0 ? '- sobra' : '+ falta'}</span><span>${fmt(Math.abs(diferencia))}</span></div>
+<div class="row bold"><span>TOTAL FINAL ${totalFinal > 0.01 ? '(+ falta)' : totalFinal < -0.01 ? '(- sobra)' : '(cuadra)'}</span><span>${fmt(Math.abs(totalFinal))}</span></div>
 <div class="row"><span>PV=</span><span>${pv}</span></div>
-<div class="sep"></div>
-<div class="row bold" style="color:#b45309"><span>DEUDA PLATAFORMAS</span><span>${fmt(deudaPlataformas)}</span></div>
+${deudaPlataformas > 0 ? `<div class="sep"></div><div class="row bold"><span>DEUDA PLATAFORMAS</span><span>${fmt(deudaPlataformas)}</span></div>` : ''}
 <script>window.onload=function(){window.print();setTimeout(function(){window.close()},1000)}</script>
 </body></html>`;
                 const win = window.open('', '_blank', 'width=250,height=600');
@@ -445,12 +449,21 @@ h2{text-align:center;font-size:14px;margin-bottom:4px}
                       <span>+ TOTAL FORMAS PAGO</span>
                       <span>{fmtMoney(totalFormasPago)}</span>
                     </div>
+                    <div className="flex justify-between px-3 py-0.5 pl-8 text-gray-400 text-[10px]">
+                      <span>Efvo: {fmtMoney(resumen.por_metodo.efectivo)} | Tarj: {fmtMoney(resumen.por_metodo.tarjeta)} | Plat: {fmtMoney(resumen.por_metodo.app_plataforma)}</span>
+                    </div>
                     <div className="flex justify-between px-3 py-1 pl-6 text-gray-600">
                       <span>FONDO INICIAL CAJA</span>
                       <span>{fmtMoney(fondoInicial)}</span>
                     </div>
+                    {depositosCorte > 0 && (
+                      <div className="flex justify-between px-3 py-1 pl-6 text-gray-600">
+                        <span>DEPÓSITOS</span>
+                        <span>{fmtMoney(depositosCorte)}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between px-3 py-1.5 font-bold bg-gray-50">
-                      <span>- TOTAL 1=</span>
+                      <span>= TOTAL 1</span>
                       <span>{fmtMoney(total1)}</span>
                     </div>
                     <div className="flex justify-between px-3 py-1 pl-6 text-gray-600">
@@ -458,7 +471,7 @@ h2{text-align:center;font-size:14px;margin-bottom:4px}
                       <span>{fmtMoney(plataformas)}</span>
                     </div>
                     <div className="flex justify-between px-3 py-1.5 font-bold bg-gray-50">
-                      <span>- TOTAL 2=</span>
+                      <span>= TOTAL 2</span>
                       <span>{fmtMoney(total2)}</span>
                     </div>
                     <div className="flex justify-between px-3 py-1 pl-6 text-gray-600">
@@ -466,7 +479,7 @@ h2{text-align:center;font-size:14px;margin-bottom:4px}
                       <span>{fmtMoney(totalTarjetas)}</span>
                     </div>
                     <div className="flex justify-between px-3 py-1.5 font-bold bg-gray-50">
-                      <span>- TOTAL 3=</span>
+                      <span>= TOTAL 3</span>
                       <span>{fmtMoney(total3)}</span>
                     </div>
                     <div className="flex justify-between px-3 py-1 pl-6 text-gray-600">
@@ -474,28 +487,24 @@ h2{text-align:center;font-size:14px;margin-bottom:4px}
                       <span>{fmtMoney(gastosCorte)}</span>
                     </div>
                     <div className="flex justify-between px-3 py-1.5 font-bold bg-gray-50">
-                      <span>- TOTAL 4=</span>
+                      <span>= TOTAL 4</span>
                       <span>{fmtMoney(total4)}</span>
                     </div>
                     <div className="flex justify-between px-3 py-1 pl-6 text-gray-600">
                       <span>RETIRO DE EFECTIVO</span>
                       <span>{fmtMoney(retiroEfectivo)}</span>
                     </div>
-                    <div className="flex justify-between px-3 py-1.5 font-bold bg-gray-50">
-                      <span>- TOTAL 5=</span>
+                    <div className="flex justify-between px-3 py-1.5 font-bold bg-purple-50 text-purple-800">
+                      <span>= EFECTIVO TEÓRICO</span>
                       <span>{fmtMoney(total5)}</span>
                     </div>
                     <div className="flex justify-between px-3 py-1.5 bg-blue-50 text-blue-800">
                       <span>REALIDAD DE CAJA</span>
                       <span className="font-bold">{fmtMoney(realidadCaja)}</span>
                     </div>
-                    <div className="flex justify-between px-3 py-1.5 font-bold bg-gray-100">
-                      <span>TOTAL FINAL</span>
-                      <span>{fmtMoney(totalFinal)}</span>
-                    </div>
-                    <div className={`flex justify-between px-3 py-1.5 font-bold ${diferencia >= 0 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
-                      <span>(+/-) {diferencia >= 0 ? '- sobra' : '+ falta'}</span>
-                      <span>{fmtMoney(Math.abs(diferencia))}</span>
+                    <div className={`flex justify-between px-3 py-1.5 font-bold ${Math.abs(totalFinal) < 0.01 ? 'bg-green-50 text-green-700' : totalFinal > 0 ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
+                      <span>TOTAL FINAL {totalFinal > 0.01 ? '(+ falta)' : totalFinal < -0.01 ? '(- sobra)' : '(cuadra)'}</span>
+                      <span>{fmtMoney(Math.abs(totalFinal))}</span>
                     </div>
                     <div className="flex justify-between px-3 py-1 text-gray-600">
                       <span>PV=</span>
