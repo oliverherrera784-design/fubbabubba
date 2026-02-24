@@ -15,12 +15,14 @@ import {
   Star,
   Users,
   FileSpreadsheet,
+  CalendarSearch,
 } from 'lucide-react';
 import { useAuth, getVisiblePages } from '@/lib/auth';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Ventas', href: '/ventas', icon: ShoppingCart },
+  { name: 'Reporte Diario', href: '/reporte-diario', icon: CalendarSearch },
   { name: 'Cierres de Caja', href: '/cierres', icon: Vault },
   { name: 'Lealtad', href: '/lealtad', icon: Star },
   { name: 'Productos', href: '/productos', icon: CupSoda },

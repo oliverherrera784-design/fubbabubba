@@ -417,10 +417,14 @@ export async function getOrdenes(filtros?: {
   desde?: string;
   hasta?: string;
   limit?: number;
+  includeItems?: boolean;
 }) {
+  const selectStr = filtros?.includeItems
+    ? '*, pagos(metodo, monto), orden_items(id, nombre_producto, cantidad, precio_unitario, modificadores, subtotal)'
+    : '*, pagos(metodo, monto)';
   let query = supabase
     .from('ordenes')
-    .select('*, pagos(metodo, monto)')
+    .select(selectStr)
     .order('created_at', { ascending: false });
 
   if (filtros?.sucursalId) {

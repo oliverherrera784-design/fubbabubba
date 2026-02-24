@@ -35,7 +35,7 @@ export const ROL_LABELS: Record<Rol, string> = {
 };
 
 // Páginas que puede ver cada rol
-const GERENTE_SUCURSAL_PAGES = ['/', '/ventas', '/cierres', '/empleados'];
+const GERENTE_SUCURSAL_PAGES = ['/', '/ventas', '/reporte-diario', '/cierres', '/empleados'];
 
 export function getVisiblePages(rol: Rol): string[] | 'all' {
   if (rol === 'admin' || rol === 'gerente') return 'all';

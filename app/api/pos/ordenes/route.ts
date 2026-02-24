@@ -68,12 +68,14 @@ export async function GET(request: Request) {
     const desde = searchParams.get('desde');
     const hasta = searchParams.get('hasta');
     const limit = searchParams.get('limit');
+    const includeItems = searchParams.get('include_items') === 'true';
 
     const ordenes = await getOrdenes({
       sucursalId: sucursalId ? parseInt(sucursalId) : undefined,
       desde: desde || undefined,
       hasta: hasta || undefined,
       limit: limit ? parseInt(limit) : undefined,
+      includeItems,
     });
 
     return NextResponse.json({ ordenes });
