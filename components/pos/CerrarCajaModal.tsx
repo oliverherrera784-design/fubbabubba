@@ -323,61 +323,6 @@ export function CerrarCajaModal({
               )}
             </div>
 
-            {/* Resumen de ventas */}
-            <div>
-              <h4 className="font-bold text-gray-900 mb-2 text-sm uppercase tracking-wide">Resumen de Ventas</h4>
-              <div className="bg-white border border-gray-200 rounded-lg divide-y divide-gray-100">
-                <Row label="Ventas brutas" value={fmtMoney(resumen.ventas_brutas)} bold />
-                <Row label="Reembolsos" value={fmtMoney(resumen.reembolsos)} />
-                <Row label="Descuentos" value={fmtMoney(resumen.descuentos)} />
-                <Row label="Ventas netas" value={fmtMoney(resumen.ventas_netas)} bold />
-                <Row label="Efectivo" value={fmtMoney(resumen.por_metodo.efectivo)} indent />
-                <Row label="Tarjeta" value={fmtMoney(resumen.por_metodo.tarjeta)} indent />
-                {resumen.comision_tarjeta > 0 && (
-                  <>
-                    <Row label="Comisión MP (4.05%)" value={`-${fmtMoney(resumen.comision_tarjeta)}`} indent negative />
-                    <Row label="Neto tarjeta" value={fmtMoney(resumen.ingreso_neto_tarjeta)} indent />
-                  </>
-                )}
-                {(resumen.por_metodo.app_plataforma || 0) > 0 && (
-                  <Row label="App Plataforma" value={fmtMoney(resumen.por_metodo.app_plataforma)} indent />
-                )}
-              </div>
-            </div>
-
-            {/* Plataformas de Delivery */}
-            {resumen.por_plataforma && Object.keys(resumen.por_plataforma).length > 0 && (
-              <div>
-                <h4 className="font-bold text-gray-900 mb-2 text-sm uppercase tracking-wide">Plataformas de Delivery</h4>
-                <div className="bg-white border border-gray-200 rounded-lg divide-y divide-gray-100">
-                  {Object.entries(resumen.por_plataforma).map(([plat, data]) => (
-                    <div key={plat} className="px-3 py-2.5">
-                      <div className="flex justify-between font-bold text-sm">
-                        <span>{PLATAFORMA_LABELS[plat] || plat}</span>
-                        <span>{fmtMoney(data.total_plataforma || data.total)} ({data.ordenes} ord.)</span>
-                      </div>
-                      <div className="flex justify-between text-xs text-gray-500 mt-0.5">
-                        <span>App: {fmtMoney(data.app)}</span>
-                        <span>Efectivo: {fmtMoney(data.efectivo)}</span>
-                      </div>
-                      {data.sobreprecio > 0 && (
-                        <div className="flex justify-between text-xs text-amber-600 mt-0.5">
-                          <span>Sobreprecio (dinero de plataforma)</span>
-                          <span>{fmtMoney(data.sobreprecio)}</span>
-                        </div>
-                      )}
-                      {(data.comision_app + data.comision_efectivo) > 0 && (
-                        <div className="flex justify-between text-xs text-red-500 mt-0.5">
-                          <span>Comisión estimada</span>
-                          <span>-{fmtMoney(data.comision_app + data.comision_efectivo)}</span>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {/* === HOJA DE CORTE FINAL === */}
             {efectivoNum > 0 && (() => {
               const totalFormasPago = resumen.por_metodo.efectivo + resumen.por_metodo.tarjeta + resumen.por_metodo.app_plataforma;
@@ -410,7 +355,7 @@ body{width:58mm;font-family:'Courier New',monospace;font-size:11px;line-height:1
 h2{text-align:center;font-size:14px;margin-bottom:4px}
 .row{display:flex;justify-content:space-between}.bold{font-weight:bold}
 .sep{border-top:1px dashed #000;margin:3px 0}.indent{padding-left:8px}
-.small{font-size:9px;color:#666}
+.small{font-size:9px;color:#000}
 </style></head><body>
 <h2>HOJA CORTE FINAL</h2>
 <div class="row"><span>FECHA: ${fechaStr} ${horaStr}</span></div>
@@ -449,15 +394,15 @@ ${deudaPlataformas > 0 ? `<div class="sep"></div><div class="row bold"><span>DEU
                       <span>+ TOTAL FORMAS PAGO</span>
                       <span>{fmtMoney(totalFormasPago)}</span>
                     </div>
-                    <div className="flex justify-between px-3 py-0.5 pl-8 text-gray-400 text-[10px]">
+                    <div className="flex justify-between px-3 py-0.5 pl-8 text-gray-700 text-[10px]">
                       <span>Efvo: {fmtMoney(resumen.por_metodo.efectivo)} | Tarj: {fmtMoney(resumen.por_metodo.tarjeta)} | Plat: {fmtMoney(resumen.por_metodo.app_plataforma)}</span>
                     </div>
-                    <div className="flex justify-between px-3 py-1 pl-6 text-gray-600">
+                    <div className="flex justify-between px-3 py-1 pl-6 text-gray-900">
                       <span>FONDO INICIAL CAJA</span>
                       <span>{fmtMoney(fondoInicial)}</span>
                     </div>
                     {depositosCorte > 0 && (
-                      <div className="flex justify-between px-3 py-1 pl-6 text-gray-600">
+                      <div className="flex justify-between px-3 py-1 pl-6 text-gray-900">
                         <span>DEPÓSITOS</span>
                         <span>{fmtMoney(depositosCorte)}</span>
                       </div>
@@ -466,7 +411,7 @@ ${deudaPlataformas > 0 ? `<div class="sep"></div><div class="row bold"><span>DEU
                       <span>= TOTAL 1</span>
                       <span>{fmtMoney(total1)}</span>
                     </div>
-                    <div className="flex justify-between px-3 py-1 pl-6 text-gray-600">
+                    <div className="flex justify-between px-3 py-1 pl-6 text-gray-900">
                       <span>PLATAFORMAS</span>
                       <span>{fmtMoney(plataformas)}</span>
                     </div>
@@ -474,7 +419,7 @@ ${deudaPlataformas > 0 ? `<div class="sep"></div><div class="row bold"><span>DEU
                       <span>= TOTAL 2</span>
                       <span>{fmtMoney(total2)}</span>
                     </div>
-                    <div className="flex justify-between px-3 py-1 pl-6 text-gray-600">
+                    <div className="flex justify-between px-3 py-1 pl-6 text-gray-900">
                       <span>TOTAL TARJETAS</span>
                       <span>{fmtMoney(totalTarjetas)}</span>
                     </div>
@@ -482,7 +427,7 @@ ${deudaPlataformas > 0 ? `<div class="sep"></div><div class="row bold"><span>DEU
                       <span>= TOTAL 3</span>
                       <span>{fmtMoney(total3)}</span>
                     </div>
-                    <div className="flex justify-between px-3 py-1 pl-6 text-gray-600">
+                    <div className="flex justify-between px-3 py-1 pl-6 text-gray-900">
                       <span>GASTOS</span>
                       <span>{fmtMoney(gastosCorte)}</span>
                     </div>
@@ -490,7 +435,7 @@ ${deudaPlataformas > 0 ? `<div class="sep"></div><div class="row bold"><span>DEU
                       <span>= TOTAL 4</span>
                       <span>{fmtMoney(total4)}</span>
                     </div>
-                    <div className="flex justify-between px-3 py-1 pl-6 text-gray-600">
+                    <div className="flex justify-between px-3 py-1 pl-6 text-gray-900">
                       <span>RETIRO DE EFECTIVO</span>
                       <span>{fmtMoney(retiroEfectivo)}</span>
                     </div>
@@ -506,7 +451,7 @@ ${deudaPlataformas > 0 ? `<div class="sep"></div><div class="row bold"><span>DEU
                       <span>TOTAL FINAL {totalFinal > 0.01 ? '(+ falta)' : totalFinal < -0.01 ? '(- sobra)' : '(cuadra)'}</span>
                       <span>{fmtMoney(Math.abs(totalFinal))}</span>
                     </div>
-                    <div className="flex justify-between px-3 py-1 text-gray-600">
+                    <div className="flex justify-between px-3 py-1 text-gray-900">
                       <span>PV=</span>
                       <span>{pv}</span>
                     </div>

@@ -27,7 +27,7 @@ export async function GET(request: Request) {
     const hasta = caja.closed_at || new Date().toISOString();
     const { data: ordenes, error: ordError } = await supabase
       .from('ordenes')
-      .select('*, plataforma, total_plataforma, pagos(metodo, monto), orden_items(cantidad)')
+      .select('*, plataforma, total_plataforma, pagos(metodo, monto), orden_items(cantidad, producto_id, nombre_producto)')
       .eq('sucursal_id', caja.sucursal_id)
       .gte('created_at', caja.opened_at)
       .lte('created_at', hasta);
@@ -157,9 +157,38 @@ export async function GET(request: Request) {
       .filter((o: any) => !o.plataforma)
       .reduce((sum: number, o: any) => sum + o.total, 0);
 
-    // Piezas vendidas (suma de cantidades de todos los items)
+    // Piezas vendidas: solo fubbas (bebidas), no botanas/extras/bases
+    const FUBBA_CATS = new Set([1, 2, 3, 7, 8]); // Fríos, Calientes, Lattes, Minis, Combinaciones
+    const NULL_CAT_DRINKS = ['LATTE CHAI', 'LATTE MATCHA', 'CHOCOLATE BLANCO', 'CHOCÓLATE BLANCO', 'TE VERDE'];
+
+    // Obtener categorías de productos
+    const allProductoIds = new Set<number>();
+    for (const o of completadas as any[]) {
+      for (const item of (o.orden_items || [])) {
+        if (item.producto_id) allProductoIds.add(item.producto_id);
+      }
+    }
+    const productoCatMap = new Map<number, number | null>();
+    if (allProductoIds.size > 0) {
+      const { data: prods } = await supabase
+        .from('productos')
+        .select('id, categoria_id')
+        .in('id', Array.from(allProductoIds));
+      for (const p of (prods || [])) {
+        productoCatMap.set(p.id, p.categoria_id);
+      }
+    }
+
     const piezas_vendidas = completadas.reduce((sum: number, o: any) => {
-      return sum + (o.orden_items || []).reduce((s: number, item: any) => s + (item.cantidad || 0), 0);
+      return sum + (o.orden_items || []).reduce((s: number, item: any) => {
+        const catId = productoCatMap.get(item.producto_id);
+        if (catId != null && FUBBA_CATS.has(catId)) return s + (item.cantidad || 0);
+        if (catId == null) {
+          const upper = (item.nombre_producto || '').toUpperCase();
+          if (NULL_CAT_DRINKS.some((d: string) => upper.includes(d))) return s + (item.cantidad || 0);
+        }
+        return s;
+      }, 0);
     }, 0);
 
     return NextResponse.json({

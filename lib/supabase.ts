@@ -534,6 +534,8 @@ export async function getCajasAbiertas(): Promise<Caja[]> {
 export async function getCierresCaja(filtros?: {
   sucursalId?: number;
   limit?: number;
+  desde?: string;
+  hasta?: string;
 }): Promise<Caja[]> {
   let query = supabase
     .from('cajas')
@@ -541,6 +543,8 @@ export async function getCierresCaja(filtros?: {
     .eq('estado', 'cerrada')
     .order('closed_at', { ascending: false });
   if (filtros?.sucursalId) query = query.eq('sucursal_id', filtros.sucursalId);
+  if (filtros?.desde) query = query.gte('closed_at', filtros.desde);
+  if (filtros?.hasta) query = query.lte('closed_at', filtros.hasta);
   if (filtros?.limit) query = query.limit(filtros.limit);
   const { data, error } = await query;
   if (error) throw error;
