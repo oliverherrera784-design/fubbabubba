@@ -5,7 +5,7 @@ import { cerrarCaja } from '@/lib/supabase';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { caja_id, efectivo_contado, notas } = body;
+    const { caja_id, efectivo_contado, notas, efectivo_siguiente } = body;
 
     if (!caja_id || efectivo_contado === undefined) {
       return NextResponse.json(
@@ -14,7 +14,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const caja = await cerrarCaja(caja_id, efectivo_contado, notas);
+    const caja = await cerrarCaja(caja_id, efectivo_contado, notas, efectivo_siguiente);
     return NextResponse.json({ success: true, caja });
   } catch (error: any) {
     console.error('Error cerrando caja:', error);

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getCajaAbierta, abrirCaja } from '@/lib/supabase';
+import { getCajaAbierta, abrirCaja, supabase } from '@/lib/supabase';
 
 // GET - obtener caja abierta de una sucursal
 export async function GET(request: Request) {
@@ -12,7 +12,22 @@ export async function GET(request: Request) {
     }
 
     const caja = await getCajaAbierta(parseInt(sucursalId));
-    return NextResponse.json({ caja });
+
+    // Si no hay caja abierta, buscar la última cerrada para obtener efectivo_siguiente
+    let efectivoAnterior: number | null = null;
+    if (!caja) {
+      const { data: ultimaCerrada } = await supabase
+        .from('cajas')
+        .select('efectivo_siguiente')
+        .eq('sucursal_id', parseInt(sucursalId))
+        .eq('estado', 'cerrada')
+        .order('closed_at', { ascending: false })
+        .limit(1)
+        .single();
+      efectivoAnterior = ultimaCerrada?.efectivo_siguiente ?? null;
+    }
+
+    return NextResponse.json({ caja, efectivo_anterior: efectivoAnterior });
   } catch (error: any) {
     console.error('Error obteniendo caja:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });

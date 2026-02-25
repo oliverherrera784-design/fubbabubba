@@ -118,6 +118,7 @@ export interface Caja {
   closed_at: string | null;
   prefijo_orden: number | null;
   contador_orden: number;
+  efectivo_siguiente: number | null;
 }
 
 export type SubcategoriaGasto = 'insumos' | 'proveedor' | 'renta' | 'nomina' | 'servicios' | 'limpieza' | 'otros';
@@ -475,7 +476,7 @@ export async function abrirCaja(sucursalId: number, montoApertura: number): Prom
   return data;
 }
 
-export async function cerrarCaja(cajaId: string, efectivoContado: number, notas?: string): Promise<Caja> {
+export async function cerrarCaja(cajaId: string, efectivoContado: number, notas?: string, efectivoSiguiente?: number): Promise<Caja> {
   const { data, error } = await supabase
     .from('cajas')
     .update({
@@ -484,6 +485,7 @@ export async function cerrarCaja(cajaId: string, efectivoContado: number, notas?
       notas: notas || null,
       estado: 'cerrada',
       closed_at: new Date().toISOString(),
+      efectivo_siguiente: efectivoSiguiente ?? null,
     })
     .eq('id', cajaId)
     .select()

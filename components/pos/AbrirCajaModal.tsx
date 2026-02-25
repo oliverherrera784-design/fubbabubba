@@ -8,6 +8,7 @@ interface AbrirCajaModalProps {
   onConfirm: (montoApertura: number) => void;
   onClose: () => void;
   loading?: boolean;
+  efectivoAnterior?: number | null;
 }
 
 const DENOMINACIONES = [
@@ -24,10 +25,11 @@ const DENOMINACIONES = [
   { valor: 0.5, label: '$0.50', tipo: 'moneda' },
 ];
 
-export function AbrirCajaModal({ sucursalNombre, onConfirm, onClose, loading }: AbrirCajaModalProps) {
+export function AbrirCajaModal({ sucursalNombre, onConfirm, onClose, loading, efectivoAnterior }: AbrirCajaModalProps) {
   const [mode, setMode] = useState<'simple' | 'denominaciones'>('simple');
   const [monto, setMonto] = useState('');
   const [cantidades, setCantidades] = useState<Record<number, number>>({});
+  const [confirmoAnterior, setConfirmoAnterior] = useState<boolean | null>(efectivoAnterior ? null : true);
 
   const montoSimple = parseFloat(monto) || 0;
 
@@ -65,6 +67,7 @@ export function AbrirCajaModal({ sucursalNombre, onConfirm, onClose, loading }: 
         </div>
 
         {/* Toggle modo */}
+        {confirmoAnterior !== null && (
         <div className="px-6 pt-4 flex-shrink-0">
           <div className="flex bg-gray-100 rounded-xl p-1">
             <button
@@ -85,10 +88,56 @@ export function AbrirCajaModal({ sucursalNombre, onConfirm, onClose, loading }: 
             </button>
           </div>
         </div>
+        )}
 
         {/* Contenido */}
         <div className="overflow-y-auto flex-1 p-6 pt-4">
-          {mode === 'simple' ? (
+          {/* Banner turno anterior */}
+          {efectivoAnterior != null && efectivoAnterior > 0 && confirmoAnterior === null && (
+            <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+              <p className="text-sm font-semibold text-blue-800 mb-1">El turno anterior dejo:</p>
+              <p className="text-2xl font-bold text-blue-700 text-center my-2">
+                ${efectivoAnterior.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+              </p>
+              <p className="text-sm text-blue-600 mb-3 text-center">Es correcto?</p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setConfirmoAnterior(true);
+                    setMonto(efectivoAnterior.toString());
+                  }}
+                  className="flex-1 py-2.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-colors touch-manipulation"
+                >
+                  Si, es correcto
+                </button>
+                <button
+                  onClick={() => setConfirmoAnterior(false)}
+                  className="flex-1 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-lg transition-colors touch-manipulation"
+                >
+                  No, es diferente
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Info si confirmó o rechazó */}
+          {efectivoAnterior != null && efectivoAnterior > 0 && confirmoAnterior === true && (
+            <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-xl text-center">
+              <p className="text-sm text-green-700">
+                Turno anterior: <span className="font-bold">${efectivoAnterior.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span> — Confirmado
+              </p>
+            </div>
+          )}
+
+          {efectivoAnterior != null && efectivoAnterior > 0 && confirmoAnterior === false && (
+            <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-center">
+              <p className="text-sm text-amber-700">
+                Turno anterior dejo <span className="font-bold">${efectivoAnterior.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span> — Ingresa el monto real
+              </p>
+            </div>
+          )}
+
+          {confirmoAnterior !== null && (mode === 'simple' ? (
             <>
               <label className="text-sm font-semibold text-gray-700 block mb-2">
                 Fondo de caja (efectivo inicial)
@@ -153,7 +202,7 @@ export function AbrirCajaModal({ sucursalNombre, onConfirm, onClose, loading }: 
                 ))}
               </div>
             </>
-          )}
+          ))}
         </div>
 
         {/* Total + Botón */}
@@ -168,7 +217,7 @@ export function AbrirCajaModal({ sucursalNombre, onConfirm, onClose, loading }: 
           )}
           <button
             onClick={handleConfirm}
-            disabled={loading}
+            disabled={loading || confirmoAnterior === null}
             className="w-full py-4 bg-purple-600 hover:bg-purple-700 text-white font-bold text-lg rounded-xl transition-all touch-manipulation shadow-lg shadow-purple-200 disabled:opacity-50"
           >
             {loading ? (

@@ -49,6 +49,7 @@ export default function POSPage() {
   // Caja
   const [cajaActual, setCajaActual] = useState<Caja | null>(null);
   const [loadingCaja, setLoadingCaja] = useState(false);
+  const [efectivoAnterior, setEfectivoAnterior] = useState<number | null>(null);
 
   // UI
   const [loading, setLoading] = useState(true);
@@ -196,6 +197,7 @@ export default function POSPage() {
         const data = await res.json();
         setCajaActual(data.caja || null);
         if (!data.caja) {
+          setEfectivoAnterior(data.efectivo_anterior ?? null);
           setShowAbrirCaja(true);
         }
       } catch (e) {
@@ -231,7 +233,7 @@ export default function POSPage() {
   }, [pos.sucursalId]);
 
   // Cerrar caja
-  const handleCerrarCaja = useCallback(async (efectivoContado: number, notas?: string, recibeId?: number) => {
+  const handleCerrarCaja = useCallback(async (efectivoContado: number, notas?: string, recibeId?: number, efectivoSiguiente?: number) => {
     if (!cajaActual) return;
     setLoadingCaja(true);
     try {
@@ -240,7 +242,7 @@ export default function POSPage() {
       const res = await fetch('/api/pos/caja/cerrar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ caja_id: cajaActual.id, efectivo_contado: efectivoContado, notas: notasFinal || undefined }),
+        body: JSON.stringify({ caja_id: cajaActual.id, efectivo_contado: efectivoContado, notas: notasFinal || undefined, efectivo_siguiente: efectivoSiguiente }),
       });
       const data = await res.json();
       if (data.success) {
@@ -888,6 +890,7 @@ export default function POSPage() {
           onConfirm={handleAbrirCaja}
           onClose={() => setShowAbrirCaja(false)}
           loading={loadingCaja}
+          efectivoAnterior={efectivoAnterior}
         />
       )}
 

@@ -57,7 +57,7 @@ interface CerrarCajaModalProps {
   sucursalNombre: string;
   openedAt: string;
   empleados: EmpleadoBasico[];
-  onConfirm: (efectivoContado: number, notas?: string, recibeId?: number) => void;
+  onConfirm: (efectivoContado: number, notas?: string, recibeId?: number, efectivoSiguiente?: number) => void;
   onClose: () => void;
   loading?: boolean;
 }
@@ -100,6 +100,7 @@ export function CerrarCajaModal({
   const [cantidades, setCantidades] = useState<Record<number, number>>({});
   const [notas, setNotas] = useState('');
   const [recibeId, setRecibeId] = useState<number | ''>('');
+  const [efectivoSiguiente, setEfectivoSiguiente] = useState('');
   const [resumen, setResumen] = useState<CuadreResumen | null>(null);
   const [loadingCuadre, setLoadingCuadre] = useState(true);
 
@@ -140,7 +141,8 @@ export function CerrarCajaModal({
       alert(`No puedes dejar más de $${TOPE_CAJA.toLocaleString()} en caja. Haz un retiro antes de cerrar.`);
       return;
     }
-    onConfirm(efectivoNum, notas || undefined, recibeId || undefined);
+    const sigNum = parseFloat(efectivoSiguiente) || 0;
+    onConfirm(efectivoNum, notas || undefined, recibeId || undefined, sigNum > 0 ? sigNum : undefined);
   };
 
   const fmtMoney = (n: number) => `$${n.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
@@ -472,6 +474,24 @@ ${deudaPlataformas > 0 ? `<div class="sep"></div><div class="row bold"><span>DEU
                 </div>
               );
             })()}
+
+            {/* Efectivo para siguiente turno */}
+            <div>
+              <label className="text-sm font-semibold text-gray-700 block mb-2">
+                Efectivo que dejas para el siguiente turno
+              </label>
+              <input
+                type="number"
+                inputMode="decimal"
+                value={efectivoSiguiente}
+                onChange={(e) => setEfectivoSiguiente(e.target.value)}
+                placeholder="0.00"
+                className="w-full p-3 border border-gray-300 rounded-xl text-lg font-bold text-center focus:outline-none focus:ring-2 focus:ring-red-500"
+              />
+              <p className="text-xs text-gray-500 mt-1 text-center">
+                El siguiente turno verá este monto al abrir caja
+              </p>
+            </div>
 
             {/* Quién recibe */}
             <div>
