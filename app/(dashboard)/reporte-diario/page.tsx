@@ -127,6 +127,7 @@ export default function ReporteDiarioPage() {
   const [loading, setLoading] = useState(true);
   const [expandedOrdenes, setExpandedOrdenes] = useState<Set<string>>(new Set());
   const [cortesPorSucursal, setCortesPorSucursal] = useState<Map<number, CajaConCuadre[]>>(new Map());
+  const [sucursalExpandida, setSucursalExpandida] = useState<number | null>(null);
 
   const { desde, hasta } = useMemo(() => {
     const d = new Date(fecha + 'T00:00:00');
@@ -241,8 +242,13 @@ export default function ReporteDiarioPage() {
     });
   };
 
-  const expandirTodo = () => setExpandedOrdenes(new Set(ordenes.map(o => o.id)));
-  const colapsarTodo = () => setExpandedOrdenes(new Set());
+  const toggleSucursal = (sucId: number) => {
+    setSucursalExpandida(prev => {
+      if (prev === sucId) return null;
+      setExpandedOrdenes(new Set());
+      return sucId;
+    });
+  };
 
   const hoy = formatFechaInput(new Date());
   const ayer = (() => { const d = new Date(); d.setDate(d.getDate() - 1); return formatFechaInput(d); })();
@@ -289,22 +295,20 @@ export default function ReporteDiarioPage() {
         </div>
       ) : (
         <>
-          {/* Botones expandir/colapsar */}
-          <div className="flex justify-end gap-2">
-            <button onClick={expandirTodo} className="px-3 py-1.5 text-xs font-medium text-purple-700 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">Expandir todo</button>
-            <button onClick={colapsarTodo} className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">Colapsar todo</button>
-          </div>
-
-          {/* Por sucursal */}
+          {/* Por sucursal — cards compactas con accordion */}
           {porSucursal.map(([sucId, ordenesSuc]) => {
             const stats = calcStats(ordenesSuc);
             const nombreSuc = sucursalMap[sucId] || `Sucursal ${sucId}`;
             const cortes = cortesPorSucursal.get(sucId) || [];
+            const isExpanded = sucursalExpandida === sucId;
 
             return (
               <div key={sucId} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                {/* Header de sucursal */}
-                <div className="px-6 py-4 bg-gradient-to-r from-purple-50 to-white border-b border-gray-100">
+                {/* Header clickeable */}
+                <button
+                  onClick={() => toggleSucursal(sucId)}
+                  className="w-full px-6 py-4 text-left hover:bg-purple-50/50 transition-colors"
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
@@ -313,113 +317,140 @@ export default function ReporteDiarioPage() {
                       <div>
                         <h2 className="text-lg font-bold text-gray-900">{nombreSuc}</h2>
                         <p className="text-sm text-gray-500">
-                          {stats.totalOrdenes} orden{stats.totalOrdenes !== 1 ? 'es' : ''} &middot; {stats.piezas} pieza{stats.piezas !== 1 ? 's' : ''}
-                          {stats.canceladas > 0 && <span className="text-red-500"> &middot; {stats.canceladas} cancelada{stats.canceladas !== 1 ? 's' : ''}</span>}
+                          {stats.totalOrdenes} orden{stats.totalOrdenes !== 1 ? 'es' : ''}
+                          {stats.canceladas > 0 && <span className="text-red-500"> · {stats.canceladas} cancelada{stats.canceladas !== 1 ? 's' : ''}</span>}
                         </p>
                       </div>
                     </div>
-                    <p className="text-xl font-bold text-purple-700">{fmtMoney(stats.totalVentas)}</p>
+                    <div className="flex items-center gap-3">
+                      <p className="text-xl font-bold text-purple-700">{fmtMoney(stats.totalVentas)}</p>
+                      {isExpanded
+                        ? <ChevronUp className="w-5 h-5 text-gray-400" />
+                        : <ChevronDown className="w-5 h-5 text-gray-400" />}
+                    </div>
                   </div>
-                </div>
+                  {/* Desglose rápido de métodos de pago */}
+                  <div className="flex items-center gap-4 mt-2 ml-13 text-xs text-gray-500">
+                    <span className="flex items-center gap-1"><Banknote className="w-3 h-3 text-green-600" /> {fmtMoney(stats.efectivo)}</span>
+                    <span className="flex items-center gap-1"><CreditCard className="w-3 h-3 text-blue-600" /> {fmtMoney(stats.tarjeta)}</span>
+                    {stats.plataforma > 0 && (
+                      <span className="flex items-center gap-1"><Smartphone className="w-3 h-3 text-orange-600" /> {fmtMoney(stats.plataforma)}</span>
+                    )}
+                  </div>
+                </button>
 
-                {/* Tabla de órdenes */}
-                {ordenesSuc.length > 0 && (
-                  <div className="divide-y divide-gray-100">
-                    {ordenesSuc.map(orden => {
-                      const isExpanded = expandedOrdenes.has(orden.id);
-                      const badge = estadoBadge(orden.estado);
-                      const hora = new Date(orden.created_at).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+                {/* Contenido expandido */}
+                {isExpanded && (
+                  <>
+                    {/* Cortes de turno — primero */}
+                    {cortes.length > 0 && (
+                      <div className="border-t border-gray-200">
+                        {cortes.map((corte, idx) => (
+                          <CorteSection key={corte.caja.id} corte={corte} idx={idx} totalCortes={cortes.length} />
+                        ))}
+                      </div>
+                    )}
 
-                      return (
-                        <div key={orden.id}>
-                          <button onClick={() => toggleOrden(orden.id)} className="w-full px-6 py-3 flex items-center gap-4 hover:bg-gray-50 transition-colors text-left">
-                            <div className="w-5 flex-shrink-0">
-                              {isExpanded ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
-                            </div>
-                            <span className="font-medium text-gray-900 w-16">#{orden.numero_orden}</span>
-                            <span className="text-sm text-gray-500 w-14">{hora}</span>
-                            <span className="text-sm text-gray-600 flex-1 truncate">
-                              {(orden.orden_items || []).map(i => `${i.cantidad}x ${i.nombre_producto}`).join(', ')}
-                            </span>
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${badge.cls}`}>{badge.text}</span>
-                            <div className="text-right w-28">
-                              {orden.pagos?.length > 1
-                                ? <span className="text-xs text-purple-600 font-medium">Mixto</span>
-                                : <span className="text-xs text-gray-500">{metodoPagoLabel(orden.pagos?.[0]?.metodo || '', orden.plataforma)}</span>}
-                            </div>
-                            <span className="font-bold text-gray-900 w-24 text-right">{fmtMoney(orden.total)}</span>
-                          </button>
-
-                          {isExpanded && (
-                            <div className="px-6 pb-4 pt-1 ml-9 bg-gray-50 border-t border-gray-100">
-                              <div className="space-y-1.5 mb-3">
-                                {(orden.orden_items || []).map(item => (
-                                  <div key={item.id} className="flex justify-between text-sm">
-                                    <div>
-                                      <span className="text-gray-700">{item.cantidad}x {item.nombre_producto}</span>
-                                      <span className="text-gray-400 ml-1">@${item.precio_unitario.toFixed(2)}</span>
-                                      {item.modificadores?.length > 0 && (
-                                        <p className="text-xs text-gray-500 ml-4">+ {item.modificadores.map(m => `${m.nombre} ($${m.precio})`).join(', ')}</p>
-                                      )}
-                                    </div>
-                                    <span className="font-medium text-gray-900">${item.subtotal.toFixed(2)}</span>
-                                  </div>
-                                ))}
-                              </div>
-                              <div className="border-t border-gray-200 pt-2 space-y-1 text-sm">
-                                <div className="flex justify-between text-gray-600"><span>Subtotal</span><span>${orden.subtotal.toFixed(2)}</span></div>
-                                {orden.descuento > 0 && <div className="flex justify-between text-red-600"><span>Descuento</span><span>-${orden.descuento.toFixed(2)}</span></div>}
-                                <div className="flex justify-between text-gray-600"><span>IVA (16%)</span><span>${orden.impuesto.toFixed(2)}</span></div>
-                                <div className="flex justify-between font-bold text-gray-900 pt-1 border-t border-gray-200"><span>Total</span><span>${orden.total.toFixed(2)}</span></div>
-                              </div>
-                              <div className="mt-2 pt-2 border-t border-gray-200">
-                                <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Pagos</p>
-                                {(orden.pagos || []).map((p, i) => (
-                                  <div key={i} className="flex justify-between text-sm text-gray-700">
-                                    <span>{metodoPagoLabel(p.metodo, p.metodo === 'app_plataforma' ? orden.plataforma : null)}</span>
-                                    <span>${p.monto.toFixed(2)}</span>
-                                  </div>
-                                ))}
-                              </div>
-                              {orden.plataforma && orden.total_plataforma && orden.total_plataforma > orden.total && (
-                                <div className="mt-2 text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-1.5">
-                                  Precio plataforma: ${orden.total_plataforma.toFixed(2)} (sobreprecio: ${(orden.total_plataforma - orden.total).toFixed(2)})
-                                </div>
-                              )}
-                            </div>
-                          )}
+                    {/* Ventas del día — después */}
+                    {ordenesSuc.length > 0 && (
+                      <div className="border-t-2 border-purple-200">
+                        <div className="px-6 py-3 bg-purple-50">
+                          <h3 className="font-bold text-purple-800 text-sm">Ventas del Día</h3>
                         </div>
-                      );
-                    })}
-                  </div>
+                        <div className="divide-y divide-gray-100">
+                          {ordenesSuc.map(orden => {
+                            const isOrdenExpanded = expandedOrdenes.has(orden.id);
+                            const badge = estadoBadge(orden.estado);
+                            const hora = new Date(orden.created_at).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+
+                            return (
+                              <div key={orden.id}>
+                                <button onClick={() => toggleOrden(orden.id)} className="w-full px-6 py-3 flex items-center gap-4 hover:bg-gray-50 transition-colors text-left">
+                                  <div className="w-5 flex-shrink-0">
+                                    {isOrdenExpanded ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
+                                  </div>
+                                  <span className="font-medium text-gray-900 w-16">#{orden.numero_orden}</span>
+                                  <span className="text-sm text-gray-500 w-14">{hora}</span>
+                                  <span className="text-sm text-gray-600 flex-1 truncate">
+                                    {(orden.orden_items || []).map(i => `${i.cantidad}x ${i.nombre_producto}`).join(', ')}
+                                  </span>
+                                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${badge.cls}`}>{badge.text}</span>
+                                  <div className="text-right w-28">
+                                    {orden.pagos?.length > 1
+                                      ? <span className="text-xs text-purple-600 font-medium">Mixto</span>
+                                      : <span className="text-xs text-gray-500">{metodoPagoLabel(orden.pagos?.[0]?.metodo || '', orden.plataforma)}</span>}
+                                  </div>
+                                  <span className="font-bold text-gray-900 w-24 text-right">{fmtMoney(orden.total)}</span>
+                                </button>
+
+                                {isOrdenExpanded && (
+                                  <div className="px-6 pb-4 pt-1 ml-9 bg-gray-50 border-t border-gray-100">
+                                    <div className="space-y-1.5 mb-3">
+                                      {(orden.orden_items || []).map(item => (
+                                        <div key={item.id} className="flex justify-between text-sm">
+                                          <div>
+                                            <span className="text-gray-700">{item.cantidad}x {item.nombre_producto}</span>
+                                            <span className="text-gray-400 ml-1">@${item.precio_unitario.toFixed(2)}</span>
+                                            {item.modificadores?.length > 0 && (
+                                              <p className="text-xs text-gray-500 ml-4">+ {item.modificadores.map(m => `${m.nombre} ($${m.precio})`).join(', ')}</p>
+                                            )}
+                                          </div>
+                                          <span className="font-medium text-gray-900">${item.subtotal.toFixed(2)}</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                    <div className="border-t border-gray-200 pt-2 space-y-1 text-sm">
+                                      <div className="flex justify-between text-gray-600"><span>Subtotal</span><span>${orden.subtotal.toFixed(2)}</span></div>
+                                      {orden.descuento > 0 && <div className="flex justify-between text-red-600"><span>Descuento</span><span>-${orden.descuento.toFixed(2)}</span></div>}
+                                      <div className="flex justify-between text-gray-600"><span>IVA (16%)</span><span>${orden.impuesto.toFixed(2)}</span></div>
+                                      <div className="flex justify-between font-bold text-gray-900 pt-1 border-t border-gray-200"><span>Total</span><span>${orden.total.toFixed(2)}</span></div>
+                                    </div>
+                                    <div className="mt-2 pt-2 border-t border-gray-200">
+                                      <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Pagos</p>
+                                      {(orden.pagos || []).map((p, i) => (
+                                        <div key={i} className="flex justify-between text-sm text-gray-700">
+                                          <span>{metodoPagoLabel(p.metodo, p.metodo === 'app_plataforma' ? orden.plataforma : null)}</span>
+                                          <span>${p.monto.toFixed(2)}</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                    {orden.plataforma && orden.total_plataforma && orden.total_plataforma > orden.total && (
+                                      <div className="mt-2 text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-1.5">
+                                        Precio plataforma: ${orden.total_plataforma.toFixed(2)} (sobreprecio: ${(orden.total_plataforma - orden.total).toFixed(2)})
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        {/* Resumen de órdenes */}
+                        <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+                            <div>
+                              <p className="text-gray-500 text-xs uppercase font-medium">Total Ventas</p>
+                              <p className="font-bold text-gray-900">{fmtMoney(stats.totalVentas)}</p>
+                            </div>
+                            <div>
+                              <p className="text-gray-500 text-xs uppercase font-medium flex items-center gap-1"><Banknote className="w-3 h-3" /> Efectivo</p>
+                              <p className="font-bold text-green-700">{fmtMoney(stats.efectivo)}</p>
+                            </div>
+                            <div>
+                              <p className="text-gray-500 text-xs uppercase font-medium flex items-center gap-1"><CreditCard className="w-3 h-3" /> Tarjeta</p>
+                              <p className="font-bold text-blue-700">{fmtMoney(stats.tarjeta)}</p>
+                            </div>
+                            <div>
+                              <p className="text-gray-500 text-xs uppercase font-medium flex items-center gap-1"><Smartphone className="w-3 h-3" /> Plataforma</p>
+                              <p className="font-bold text-orange-700">{fmtMoney(stats.plataforma)}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
-
-                {/* Resumen de órdenes */}
-                <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
-                    <div>
-                      <p className="text-gray-500 text-xs uppercase font-medium">Total Ventas</p>
-                      <p className="font-bold text-gray-900">{fmtMoney(stats.totalVentas)}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500 text-xs uppercase font-medium flex items-center gap-1"><Banknote className="w-3 h-3" /> Efectivo</p>
-                      <p className="font-bold text-green-700">{fmtMoney(stats.efectivo)}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500 text-xs uppercase font-medium flex items-center gap-1"><CreditCard className="w-3 h-3" /> Tarjeta</p>
-                      <p className="font-bold text-blue-700">{fmtMoney(stats.tarjeta)}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500 text-xs uppercase font-medium flex items-center gap-1"><Smartphone className="w-3 h-3" /> Plataforma</p>
-                      <p className="font-bold text-orange-700">{fmtMoney(stats.plataforma)}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Cortes de turno */}
-                {cortes.map((corte, idx) => (
-                  <CorteSection key={corte.caja.id} corte={corte} idx={idx} totalCortes={cortes.length} />
-                ))}
               </div>
             );
           })}
